@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   ArrowRight, BrainCircuit, Building2, CheckCircle2, Eye, EyeOff,
   GraduationCap, LockKeyhole, Mail, ShieldCheck, Sparkles, TrendingUp
@@ -141,9 +142,16 @@ export default function App() {
             <div className="my-7 flex items-center gap-4">
               <div className="h-px flex-1 bg-slate-200" /><span className="whitespace-nowrap text-xs font-medium text-slate-400">NEW TO PLACESENSE?</span><div className="h-px flex-1 bg-slate-200" />
             </div>
-            <p className="text-center text-sm text-slate-500">Don't have an account?{" "}
-              <button type="button" onClick={() => setMessage("Demo only: create a separate registration page for this link.")} className="font-bold text-blue-600 hover:text-blue-800">Create account</button>
-            </p>
+            
+<p className="text-center text-sm text-slate-500">
+  Don't have an account?{" "}
+  <Link
+    to="/register"
+    className="font-bold text-blue-800 hover:text-blue-600"
+  >
+    Create account
+  </Link>
+</p>
             <div className="mt-8 flex items-center justify-center gap-2 text-xs text-slate-400"><ShieldCheck size={16} />Your information deserves to stay protected.</div>
           </div>
         </section>
