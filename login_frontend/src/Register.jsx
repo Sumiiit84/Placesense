@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -24,22 +25,75 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
-    const data = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const data = new FormData(form);
+
+    const fullName = data.get("fullName").trim();
+    const email = data.get("email").trim();
     const password = data.get("password");
     const confirmPassword = data.get("confirmPassword");
 
+    // Validate password confirmation
     if (password !== confirmPassword) {
       setMessage("Passwords do not match. Please try again.");
+      setMessageType("error");
       return;
     }
 
-    setMessage(
-      "Registration form validated! Backend integration is required to create your account."
-    );
+    if (password.length < 8) {
+      setMessage("Password must contain at least 8 characters.");
+      setMessageType("error");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setMessage("");
+
+      // Send registration data to Node.js backend
+      const response = await fetch(
+        "http://localhost:5000/api/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            full_name: fullName,
+            email: email,
+            password: password,
+            role: role.toLowerCase(),
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Registration failed.");
+      }
+
+      setMessage("Account created successfully! You can now sign in.");
+      setMessageType("success");
+
+      form.reset();
+      setRole("Student");
+
+    } catch (error) {
+      setMessage(
+        error.message || "Unable to connect to the server. Please try again."
+      );
+      setMessageType("error");
+
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -66,10 +120,12 @@ export default function Register() {
             <p className="mb-4 text-sm font-semibold text-violet-300">
               JOIN THE PLACESENSE COMMUNITY
             </p>
+
             <h2 className="text-4xl font-bold leading-tight xl:text-5xl">
               Your future starts with{" "}
               <span className="text-violet-300">one account.</span>
             </h2>
+
             <p className="mt-5 leading-7 text-indigo-100/80">
               Create your account to explore placement opportunities,
               discover skill gaps, and prepare for your dream career.
@@ -99,6 +155,7 @@ export default function Register() {
         {/* Registration form */}
         <section className="flex items-center justify-center px-5 py-10 sm:px-10 lg:px-12">
           <div className="w-full max-w-md">
+
             <div className="mb-7 flex items-center gap-3 lg:hidden">
               <div className="rounded-xl bg-indigo-600 p-3 text-white">
                 <BrainCircuit size={25} />
@@ -117,15 +174,18 @@ export default function Register() {
               <p className="mb-3 text-sm font-bold tracking-widest text-blue-600">
                 GET STARTED
               </p>
+
               <h2 className="text-3xl font-bold tracking-tight text-slate-900">
                 Create your account
               </h2>
+
               <p className="mt-3 text-sm leading-6 text-slate-500">
                 Enter your details to join PlaceSense.
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
+
               {/* Full name */}
               <div>
                 <label
@@ -134,11 +194,13 @@ export default function Register() {
                 >
                   Full name
                 </label>
+
                 <div className="relative">
                   <UserRound
                     size={20}
                     className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-400"
                   />
+
                   <input
                     id="fullName"
                     name="fullName"
@@ -156,6 +218,7 @@ export default function Register() {
                 <label className="mb-3 block text-sm font-bold text-slate-800">
                   Register as
                 </label>
+
                 <div className="grid grid-cols-3 gap-2">
                   {roles.map(({ name, Icon }) => (
                     <button
@@ -184,11 +247,13 @@ export default function Register() {
                 >
                   Email address
                 </label>
+
                 <div className="relative">
                   <Mail
                     size={20}
                     className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-400"
                   />
+
                   <input
                     id="email"
                     name="email"
@@ -209,11 +274,13 @@ export default function Register() {
                 >
                   Password
                 </label>
+
                 <div className="relative">
                   <LockKeyhole
                     size={20}
                     className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-400"
                   />
+
                   <input
                     id="password"
                     name="password"
@@ -224,6 +291,7 @@ export default function Register() {
                     required
                     className="w-full rounded-2xl border border-slate-200 bg-white py-4 pl-12 pr-12 text-sm text-slate-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                   />
+
                   <button
                     type="button"
                     aria-label={showPassword ? "Hide password" : "Show password"}
@@ -233,6 +301,7 @@ export default function Register() {
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
+
                 <p className="mt-2 text-xs text-slate-400">
                   Use at least 8 characters.
                 </p>
@@ -246,11 +315,13 @@ export default function Register() {
                 >
                   Confirm password
                 </label>
+
                 <div className="relative">
                   <LockKeyhole
                     size={20}
                     className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-400"
                   />
+
                   <input
                     id="confirmPassword"
                     name="confirmPassword"
@@ -261,11 +332,10 @@ export default function Register() {
                     required
                     className="w-full rounded-2xl border border-slate-200 bg-white py-4 pl-12 pr-12 text-sm text-slate-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                   />
+
                   <button
                     type="button"
-                    aria-label={
-                      showConfirm ? "Hide password" : "Show password"
-                    }
+                    aria-label={showConfirm ? "Hide password" : "Show password"}
                     onClick={() => setShowConfirm((value) => !value)}
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600"
                   >
@@ -277,20 +347,31 @@ export default function Register() {
               {/* Submit */}
               <button
                 type="submit"
-                className="flex w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 px-5 py-4 text-sm font-bold text-white shadow-lg shadow-blue-100 transition hover:from-blue-700 hover:to-blue-600"
+                disabled={loading}
+                className="flex w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 px-5 py-4 text-sm font-bold text-white shadow-lg shadow-blue-100 transition hover:from-blue-700 hover:to-blue-600 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Create {role} Account
-                <ArrowRight size={20} />
+                {loading
+                  ? "Creating Account..."
+                  : `Create ${role} Account`}
+
+                {!loading && <ArrowRight size={20} />}
               </button>
 
+              {/* Success / Error message */}
               {message && (
                 <p
                   role="status"
-                  className="rounded-xl border border-blue-100 bg-blue-50 p-4 text-sm leading-6 text-blue-700"
+                  aria-live="polite"
+                  className={`rounded-xl border p-4 text-sm leading-6 ${
+                    messageType === "success"
+                      ? "border-green-200 bg-green-50 text-green-700"
+                      : "border-red-200 bg-red-50 text-red-700"
+                  }`}
                 >
                   {message}
                 </p>
               )}
+
             </form>
 
             <div className="my-7 flex items-center gap-4">
@@ -315,6 +396,7 @@ export default function Register() {
               <ShieldCheck size={16} />
               Your information deserves to stay protected.
             </div>
+
           </div>
         </section>
       </div>

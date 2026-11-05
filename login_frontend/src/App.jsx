@@ -28,10 +28,58 @@ export default function App() {
   const [remember, setRemember] = useState(true);
   const [message, setMessage] = useState("");
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    setMessage(`Frontend demo: ${role} login form submitted for ${email}. No account has been authenticated.`);
+  async function handleSubmit(event) {
+  event.preventDefault();
+  setMessage("");
+
+  try {
+    const response = await fetch(
+      "http://localhost:5000/api/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          password,
+          role: role.toLowerCase()
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setMessage(data.message || "Login failed");
+      return;
+    }
+
+    // Store token based on Remember me selection
+    if (remember) {
+      localStorage.setItem("placesense_token", data.token);
+    } else {
+      sessionStorage.setItem("placesense_token", data.token);
+    }
+
+    // Store logged-in user details
+    sessionStorage.setItem(
+      "placesense_user",
+      JSON.stringify(data.user)
+    );
+
+    setMessage("Login successful! Welcome to PlaceSense.");
+
+    console.log("Logged-in user:", data.user);
+
+  } catch (error) {
+    console.error("Login error:", error);
+
+    setMessage(
+      "Cannot connect to server. Please try again."
+    );
   }
+}
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-100 p-4 sm:p-8">
@@ -43,30 +91,30 @@ export default function App() {
           <div className="pointer-events-none absolute -right-10 top-36 h-52 w-52 rounded-full border border-white/10" />
           <div className="relative z-10 flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15"><BrainCircuit size={28} /></div>
-            <div><h1 className="text-2xl font-bold tracking-tight">PlaceSense</h1><p className="text-xs text-indigo-200">Smarter Placements. Brighter Futures.</p></div>
+            <div><h1 className="text-indigo-900 font-bold tracking-tight">PlaceSense</h1><p className="text-xs text-red-900">Smarter Placements. Brighter Futures.</p></div>
           </div>
 
           <div className="relative z-10 my-10 max-w-md">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-indigo-100"><Sparkles size={16} /> Your career journey starts here</div>
-            <h2 className="text-4xl font-bold leading-tight xl:text-5xl">Turn your skills into<span className="block text-violet-300">opportunities.</span></h2>
-            <p className="mt-5 text-base leading-7 text-indigo-100/80">Discover placement drives, understand your skill gaps, and take the next step toward your dream career.</p>
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-indigo-900"><Sparkles size={16} /> Your career journey starts here</div>
+            <h2 className="text-4xl font-bold leading-tight xl:text-red-900">Turn your skills into<span className="block text-violet-900">opportunities.</span></h2>
+            <p className="mt-5 text-base leading-7 text-indigo-900">Discover placement drives, understand your skill gaps, and take the next step toward your dream career.</p>
 
-            <div className="mt-9 space-y-5">
-              <Feature Icon={CheckCircle2} title="Smart Eligibility Check" description="Know which placement drives match your profile." />
+            <div className="mt-9 space-y-5 text-indigo-900 [&_p]:!text-slate-900">
+              <Feature Icon={CheckCircle2} title="Smart Eligibility Check"  description="Know which placement drives match your profile." />
               <Feature Icon={BrainCircuit} title="AI Resume Insights" description="Discover your strengths and missing skills." />
               <Feature Icon={TrendingUp} title="Career Readiness" description="Find ways to improve your placement readiness." />
-            </div>
+            </div>  
 
             <div className="glass-card mt-10 rounded-2xl p-5">
               <div className="flex items-center justify-between gap-4">
-                <div><p className="text-sm text-indigo-200">Your next opportunity</p><p className="mt-1 text-xl font-bold">Starts with one step.</p></div>
-                <div className="rounded-xl bg-violet-400/20 p-3"><GraduationCap size={28} /></div>
+                <div><p className="text-sm text-indigo-900">Your next opportunity</p><p className="mt-1 text-xl font-bold text-indigo-900">Starts with one step.</p></div>
+                <div className="rounded-xl bg-violet-900 p-3"><GraduationCap size={28} /></div>
               </div>
               <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/15"><div className="h-full w-3/4 rounded-full bg-gradient-to-r from-violet-300 to-cyan-300" /></div>
-              <p className="mt-3 text-xs text-indigo-200">Understand your strengths. Work on what comes next.</p>
+              <p className="mt-3 text-xs text-indigo-900">Understand your strengths. Work on what comes next.</p>
             </div>
           </div>
-          <p className="relative z-10 text-xs text-indigo-200/70">© 2026 PlaceSense · Campus Placement Management</p>
+          <p className="relative z-10 text-xs text-indigo-900">© 2026 PlaceSense · Campus Placement Management</p>
         </section>
 
         {/* Right login panel */}
