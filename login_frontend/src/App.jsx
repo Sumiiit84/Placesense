@@ -132,7 +132,7 @@ export default function App() {
             </div>
 
             <div className="mb-7">
-              <label className="mb-3 block text-sm font-bold text-slate-800">Select your role</label>
+              <label className="mb-3 block text-sm font-bold text-slate-900">Select your role</label>
               <div className="grid grid-cols-3 gap-2 sm:gap-3">
                 {roles.map(({ name, Icon }) => (
                   <button key={name} type="button" onClick={() => { setRole(name); setMessage(""); }}

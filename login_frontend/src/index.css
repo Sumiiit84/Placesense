@@ -22,6 +22,6 @@ button, input { font: inherit; }
 }
 .role-button { border: 2px solid #293F82; color: #293F82; transition: all 160ms ease; }
 .role-button:hover { border-color: #a5b4fc; }
-.role-button.active { border-color: #2563eb; background: #eff6ff; color: #1d4ed8; }
+.role-button.active { border-color: #2563eb; background: #D9B976; color: #1d4ed8; }
 .form-input { transition: border-color 160ms ease, box-shadow 160ms ease; }
 .form-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.12); }
