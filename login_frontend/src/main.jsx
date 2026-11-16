@@ -7,7 +7,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-
+// USED APP FOR A LOGIN PAGE
 import App from "./App.jsx";
 import Register from "./Register.jsx";
 import "./index.css";
