@@ -207,3 +207,10 @@ export default function App() {
     </main>
   );
 }
+
+
+
+
+// git fetch origin
+// git switch sumeet
+// git pull origin sumeet
