@@ -210,7 +210,3 @@ export default function App() {
 
 
 
-
-// git fetch origin
-// git switch sumeet
-// git pull origin sumeet
