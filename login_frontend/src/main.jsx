@@ -7,9 +7,10 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-
+// USED APP FOR A LOGIN PAGE
 import App from "./App.jsx";
 import Register from "./Register.jsx";
+import Dashboard from "./Dashboard.jsx";
 import "./index.css";
 
 createRoot(document.getElementById("root")).render(
@@ -18,6 +19,7 @@ createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/login" element={<App />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route
           path="*"
           element={<Navigate to="/login" replace />}

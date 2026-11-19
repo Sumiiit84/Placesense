@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight, BrainCircuit, Building2, CheckCircle2, Eye, EyeOff,
   GraduationCap, LockKeyhole, Mail, ShieldCheck, Sparkles, TrendingUp
@@ -21,6 +21,7 @@ function Feature({ Icon, title, description }) {
 }
 
 export default function App() {
+  const navigate = useNavigate();
   const [role, setRole] = useState("Student");
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -69,6 +70,7 @@ export default function App() {
     );
 
     setMessage("Login successful! Welcome to PlaceSense.");
+    setTimeout(() => navigate("/dashboard"), 800);
 
     console.log("Logged-in user:", data.user);
 
@@ -91,15 +93,15 @@ export default function App() {
           <div className="pointer-events-none absolute -right-10 top-36 h-52 w-52 rounded-full border border-white/10" />
           <div className="relative z-10 flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15"><BrainCircuit size={28} /></div>
-            <div><h1 className="text-indigo-900 font-bold tracking-tight">PlaceSense</h1><p className="text-xs text-red-900">Smarter Placements. Brighter Futures.</p></div>
+            <div><h1 className="text-white font-bold tracking-tight">PlaceSense</h1><p className="text-xs text-indigo-900">Smarter Placements. Brighter Futures.</p></div>
           </div>
 
           <div className="relative z-10 my-10 max-w-md">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-indigo-900"><Sparkles size={16} /> Your career journey starts here</div>
-            <h2 className="text-4xl font-bold leading-tight xl:text-red-900">Turn your skills into<span className="block text-violet-900">opportunities.</span></h2>
+            <h2 className="text-4xl font-bold leading-tight xl:text-5xl text-red-900">Turn your skills into<span className="block text-violet-900">opportunities.</span></h2>
             <p className="mt-5 text-base leading-7 text-indigo-900">Discover placement drives, understand your skill gaps, and take the next step toward your dream career.</p>
 
-            <div className="mt-9 space-y-5 text-indigo-900 [&_p]:!text-slate-900">
+            <div className="mt-9 space-y-5 text-indigo-900 [&_p]:!text-indigo-900">
               <Feature Icon={CheckCircle2} title="Smart Eligibility Check"  description="Know which placement drives match your profile." />
               <Feature Icon={BrainCircuit} title="AI Resume Insights" description="Discover your strengths and missing skills." />
               <Feature Icon={TrendingUp} title="Career Readiness" description="Find ways to improve your placement readiness." />
@@ -110,7 +112,7 @@ export default function App() {
                 <div><p className="text-sm text-indigo-900">Your next opportunity</p><p className="mt-1 text-xl font-bold text-indigo-900">Starts with one step.</p></div>
                 <div className="rounded-xl bg-violet-900 p-3"><GraduationCap size={28} /></div>
               </div>
-              <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/15"><div className="h-full w-3/4 rounded-full bg-gradient-to-r from-violet-300 to-cyan-300" /></div>
+              <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/15"><div className="h-full w-3/4 rounded-full bg-gradient-to-r from-violet-900 to-cyan-900" /></div>
               <p className="mt-3 text-xs text-indigo-900">Understand your strengths. Work on what comes next.</p>
             </div>
           </div>
@@ -132,7 +134,7 @@ export default function App() {
             </div>
 
             <div className="mb-7">
-              <label className="mb-3 block text-sm font-bold text-slate-800">Select your role</label>
+              <label className="mb-3 block text-sm font-bold text-slate-900">Select your role</label>
               <div className="grid grid-cols-3 gap-2 sm:gap-3">
                 {roles.map(({ name, Icon }) => (
                   <button key={name} type="button" onClick={() => { setRole(name); setMessage(""); }}
@@ -207,3 +209,6 @@ export default function App() {
     </main>
   );
 }
+
+
+
